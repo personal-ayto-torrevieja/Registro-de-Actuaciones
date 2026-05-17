@@ -1,6 +1,6 @@
 {
   "name": "Registro de Actuaciones",
-  "short_name": "Registro de Actuaciones",
+  "short_name": "ACTOS",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#121826",
