@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual de Usuario — ACTOS · Registro de Actuaciones</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<style>
+  :root {
+    --azul: #005A9C;
+    --rosa: #EF60A3;
+    --azul-claro: #e8f1fb;
+    --rosa-claro: #fde8f3;
+    --fondo: #f4f6f9;
+    --blanco: #ffffff;
+    --texto: #1e293b;
+    --gris: #64748b;
+    --borde: #e2e8f0;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Sora',sans-serif; background:var(--fondo); color:var(--texto); line-height:1.7; }
+
+  /*  PORTADA  */
+  .portada { background:var(--azul); color:white; padding:60px 40px 50px; position:relative; overflow:hidden; }
+  .portada::before { content:''; position:absolute; top:-80px; right:-80px; width:320px; height:320px; border-radius:50%; background:rgba(239,96,163,0.18); pointer-events:none; }
+  .portada::after  { content:''; position:absolute; bottom:-60px; left:-60px; width:250px; height:250px; border-radius:50%; background:rgba(255,255,255,0.05); pointer-events:none; }
+  .portada-back { position:absolute; top:20px; right:20px; display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25); color:white; text-decoration:none; padding:9px 16px; border-radius:100px; font-size:13px; font-weight:600; backdrop-filter:blur(6px); transition:background .2s, transform .15s; z-index:10; }
+  .portada-back:hover { background:rgba(239,96,163,0.35); transform:translateY(-1px); }
+  .portada-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(239,96,163,0.25); border:1px solid rgba(239,96,163,0.4); border-radius:100px; padding:5px 14px; font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:22px; color:#ffb8db; }
+  .portada-badge .dot { width:7px; height:7px; border-radius:50%; background:var(--rosa); flex-shrink:0; }
+  .portada h1 { font-size:42px; font-weight:800; line-height:1.1; margin-bottom:8px; }
+  .portada h1 span { color:var(--rosa); }
+  .portada .subtitulo { font-size:14px; color:rgba(255,255,255,1); }
+  .portada .subtitulo2 { font-size:11px; color:rgba(255,255,255,0.7); margin-bottom:32px; }
+  .portada-meta { display:flex; gap:12px; flex-wrap:wrap; }
+  .portada-meta-item { display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(255,255,255,0.7); }
+  .portada-meta-item i { color:var(--rosa); font-size:10px; }
+
+  /*  ÍNDICE  */
+  .indice { background:var(--blanco); border-bottom:4px solid var(--rosa); padding:32px 40px; }
+  .indice h2 { font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gris); margin-bottom:18px; }
+  .indice-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:8px; }
+  .indice-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:8px; text-decoration:none; color:var(--texto); font-size:13px; font-weight:500; transition:background .15s; border:1px solid transparent; }
+  .indice-item:hover { background:var(--azul-claro); border-color:var(--borde); color:var(--azul); }
+  .indice-item:hover .indice-num { background:var(--rosa); }
+  .indice-num { min-width:22px; height:22px; background:var(--azul); color:white; border-radius:6px; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; transition:background .15s; }
+
+  /*  CONTENIDO  */
+  .contenido { max-width:900px; margin:0 auto; padding:40px 24px 60px; }
+  .seccion { margin-bottom:52px; scroll-margin-top:20px; }
+  .seccion-header { display:flex; align-items:center; gap:14px; margin-bottom:22px; padding-bottom:14px; border-bottom:2px solid var(--borde); }
+  .seccion-num { width:38px; height:38px; background:var(--azul); color:white; border-radius:10px; font-size:16px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .seccion-header h2 { font-size:22px; font-weight:700; color:var(--azul); }
+
+  /*  CARDS  */
+  .card { background:var(--blanco); border:1px solid var(--borde); border-radius:14px; padding:20px 22px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,.04); }
+  .card-title { font-size:14px; font-weight:700; color:var(--azul); margin-bottom:10px; display:flex; align-items:center; gap:10px; }
+  .card-title .ico { width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+  .card p, .card li { font-size:13.5px; color:#475569; line-height:1.65; }
+  .card ul { padding-left:18px; }
+  .card li { margin-bottom:5px; }
+
+  /*  AVISOS  */
+  .aviso { border-radius:10px; padding:14px 16px; margin-bottom:14px; font-size:13px; display:flex; gap:12px; align-items:flex-start; }
+  .aviso-icon { font-size:17px; flex-shrink:0; margin-top:2px; }
+  .aviso.info { background:var(--azul-claro); border-left:4px solid var(--azul); color:#1e4976; }
+  .aviso.tip  { background:var(--rosa-claro); border-left:4px solid var(--rosa); color:#7d1c4a; }
+  .aviso.warn { background:#fff7e6; border-left:4px solid #f59e0b; color:#78420d; }
+
+  /*  PASOS  */
+  .pasos { display:flex; flex-direction:column; gap:10px; }
+  .paso { display:flex; gap:14px; align-items:flex-start; background:var(--blanco); border:1px solid var(--borde); border-radius:12px; padding:14px 16px; box-shadow:0 1px 4px rgba(0,0,0,.03); }
+  .paso-num { width:28px; height:28px; background:var(--rosa); color:white; border-radius:50%; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+  .paso-contenido strong { display:block; font-size:13.5px; font-weight:700; color:var(--texto); margin-bottom:3px; }
+  .paso-contenido span   { font-size:13px; color:var(--gris); }
+
+  /*  BOTONES SIMULADOS  */
+  .btn-sim { display:inline-flex; align-items:center; gap:6px; padding:4px 11px; border-radius:20px; font-size:12px; font-weight:700; vertical-align:middle; }
+  .btn-rosa { background:var(--rosa); color:white; }
+  .btn-azul { background:var(--azul); color:white; }
+
+  /*  FACTORES  */
+  .factor-grid { display:flex; flex-direction:column; gap:10px; }
+  .factor-item { display:flex; gap:12px; align-items:flex-start; padding:14px 16px; background:var(--blanco); border:1px solid var(--borde); border-radius:10px; }
+  .factor-pill { padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; white-space:nowrap; flex-shrink:0; margin-top:2px; }
+  .f11 { background:#dbeafe; color:#1d4ed8; }
+  .f12 { background:#d1fae5; color:#065f46; }
+  .f13 { background:#ede9fe; color:#5b21b6; }
+  .f14 { background:#fce7f3; color:#9d174d; }
+
+  /*  TABLAS  */
+  .tabla-wrap { overflow-x:auto; border-radius:10px; border:1px solid var(--borde); margin-bottom:14px; }
+  table { width:100%; border-collapse:collapse; }
+  th { background:var(--azul); color:white; font-size:11px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; padding:11px 14px; text-align:left; }
+  td { padding:10px 14px; font-size:13px; color:var(--texto); border-top:1px solid var(--borde); vertical-align:middle; }
+  tr:nth-child(even) td { background:#f8fafc; }
+
+  /*  TOOLBAR VISUAL  */
+  .toolbar-visual { background:var(--azul); border-radius:12px; padding:12px 16px; display:flex; gap:4px; flex-wrap:wrap; justify-content:center; margin-bottom:14px; border-bottom:4px solid var(--rosa); }
+  .tv-item { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:10px 18px; border-radius:8px; color:rgba(255,255,255,0.9); font-size:10px; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; min-width:80px; }
+  .tv-item i { font-size:22px; }
+  .tv-sep { width:1px; background:rgba(255,255,255,0.2); align-self:stretch; margin:4px 0; }
+
+  /*  BARRA AGILIDAD  */
+  .agilidad-bar { display:grid; grid-template-columns:repeat(4,1fr); border-radius:10px; overflow:hidden; border:1.5px solid var(--borde); margin-bottom:14px; }
+  .agil-btn { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:14px 6px; font-size:11px; font-weight:700; border-right:1.5px solid var(--borde); }
+  .agil-btn:last-child { border-right:none; }
+  .agil-btn svg { width:22px; height:22px; }
+  .agil-azul { background:var(--azul); color:white; }
+  .agil-azul svg { stroke:white; }
+  .agil-blanco { background:white; color:var(--azul); }
+  .agil-blanco svg { stroke:var(--azul); }
+
+  /* ACCIONES */
+  .acciones-grid { display:grid; grid-template-columns:repeat(4,1fr); border-radius:12px; overflow:hidden; border:1px solid var(--borde); margin-bottom:14px; }
+  .accion-item { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:14px 8px; font-size:11px; font-weight:700; border-right:1px solid rgba(255,255,255,0.2); color:white; }
+  .accion-item:last-child { border-right:none; }
+  .accion-item i { font-size:22px; }
+  .ac-rosa { background:var(--rosa); }
+  .ac-azul { background:var(--azul); }
+
+  /* icono lucide inline en tabla */
+  .lucide-td { display:inline-flex; align-items:center; gap:6px; }
+  .lucide-td svg { width:17px; height:17px; stroke:var(--azul); flex-shrink:0; vertical-align:middle; }
+
+  /* icono FA en celda tabla toolbar */
+  .fa-td { display:inline-flex; align-items:center; gap:7px; }
+  .fa-td i { color:var(--azul); font-size:15px; }
+
+  /* CÓDIGO */
+  code { background:#1e293b; color:#7dd3fc; font-family:'JetBrains Mono',monospace; font-size:12px; padding:2px 7px; border-radius:5px; }
+
+  /* FOOTER */
+  .footer { background:var(--azul); color:rgba(255,255,255,0.6); text-align:center; padding:28px 24px; font-size:12px; }
+  .footer strong { color:white; }
+  .footer a { color:var(--rosa); text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:6px; margin-top:22px; }
+  .footer a:hover { text-decoration:underline; }
+
+  @media(max-width:640px){
+    .portada { padding:50px 20px 36px; }
+    .portada h1 { font-size:28px; }
+    .portada-back { top:14px; right:14px; font-size:12px; padding:7px 12px; }
+    .indice { padding:24px 20px; }
+    .contenido { padding:28px 16px 48px; }
+    .acciones-grid, .agilidad-bar { grid-template-columns:repeat(2,1fr); }
+    .accion-item:nth-child(2) { border-right:none; }
+    .accion-item:nth-child(3) { border-top:1px solid rgba(255,255,255,0.2); }
+    .agil-btn:nth-child(2) { border-right:none; }
+    .agil-btn:nth-child(3) { border-top:1.5px solid var(--borde); }
+  }
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="portada">
+  <a href="index.html" class="portada-back">← Volver a ACTOS</a><Br>
+  <div class="portada-badge"><i class="fa-solid fa-book-open"></i>Manual de Usuario · Versión 1.0</div>
+  <h1>ACTOS<br><span>Registro de Actuaciones</span></h1>
+ <Br>
+  <div class="portada-meta">
+    <div class="portada-meta-item"><i class="fa-solid fa-circle-dot"></i>Herramienta de productividad operativa</div>
+    <div class="portada-meta-item"><i class="fa-solid fa-circle-dot"></i>Control y seguimiento de actuaciones</div>
+    <div class="portada-meta-item"><i class="fa-solid fa-circle-dot"></i>Documentos optimizados para OnlyOffice</div>
+  </div>
+</div>
+
+<!-- ÍNDICE -->
+<div class="indice">
+  <h2>Contenidos</h2>
+  <div class="indice-grid">
+    <a href="#s1"  class="indice-item"><span class="indice-num">1</span>  ¿Qué es ACTOS?</a>
+    <a href="#s2"  class="indice-item"><span class="indice-num">2</span>  Primeros pasos: Perfil</a>
+    <a href="#s3"  class="indice-item"><span class="indice-num">3</span>  Barra superior (toolbar)</a>
+    <a href="#s4"  class="indice-item"><span class="indice-num">4</span>  Barra de agilidad</a>
+    <a href="#s5"  class="indice-item"><span class="indice-num">5</span>  Añadir un registro</a>
+    <a href="#s6"  class="indice-item"><span class="indice-num">6</span>  Factores de productividad</a>
+    <a href="#s7"  class="indice-item"><span class="indice-num">7</span>  Botones de acción</a>
+    <a href="#s8"  class="indice-item"><span class="indice-num">8</span>  Tabla de registros</a>
+    <a href="#s9"  class="indice-item"><span class="indice-num">9</span>  Exportar e informes</a>
+    <a href="#s10" class="indice-item"><span class="indice-num">10</span> Informe fotográfico</a>
+    <a href="#s11" class="indice-item"><span class="indice-num">11</span> Fichaje WCRONOS</a>
+    <a href="#s12" class="indice-item"><span class="indice-num">12</span> Copias de seguridad</a>
+    <a href="#s13" class="indice-item"><span class="indice-num">13</span> Instalar la app</a>
+  </div>
+</div>
+
+<div class="contenido">
+
+  <!-- 1 -->
+  <div class="seccion" id="s1">
+    <div class="seccion-header"><div class="seccion-num">1</div><h2>¿Qué es ACTOS?</h2></div>
+    <div class="card">
+      <p><strong>ACTOS</strong> es una aplicación web diseñada para el personal de conserjería y administración. Permite registrar, organizar y documentar todas las actuaciones realizadas en el centro para justificar el <strong>Complemento de Productividad</strong>.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico" style="background:var(--azul-claro);">💡</span> ¿Para qué sirve?</div>
+      <ul>
+        <li>Registrar cada actuación con fecha, descripción, zona y factor.</li>
+        <li>Generar informes oficiales por factor (1.1, 1.2, 1.3, 1.4).</li>
+        <li>Exportar el listado completo en PDF o Excel.</li>
+        <li>Crear un informe fotográfico justificativo con imágenes.</li>
+        <li>Facilitar el fichaje en el sistema WCRONOS.</li>
+      </ul>
+    </div>
+    <div class="aviso info">
+      <span class="aviso-icon">ℹ️</span>
+      <span>Todos los datos se guardan <strong>localmente en el navegador</strong>. No se envía nada a ningún servidor. Realiza copias de seguridad periódicas para no perder tus datos.</span>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="seccion" id="s2">
+    <div class="seccion-header"><div class="seccion-num">2</div><h2>Primeros pasos: configurar tu perfil</h2></div>
+    <p style="font-size:13.5px;color:var(--gris);margin-bottom:16px;">Antes de registrar actuaciones, configura tus datos. Aparecerán en todos los informes generados.</p>
+    <div class="pasos">
+      <div class="paso"><div class="paso-num">1</div><div class="paso-contenido"><strong>Pulsa el botón "Perfil" en la barra superior</strong><span>Icono de persona en la barra azul de la parte superior de la pantalla.</span></div></div>
+      <div class="paso"><div class="paso-num">2</div><div class="paso-contenido"><strong>Rellena tus datos</strong><span>Nombre y apellidos, DNI, puesto de trabajo y lugar de trabajo (centro).</span></div></div>
+      <div class="paso"><div class="paso-num">3</div><div class="paso-contenido"><strong>Pulsa "Guardar datos"</strong><span>Los datos quedan guardados y aparecerán automáticamente en la cabecera de todos los informes.</span></div></div>
+    </div>
+    <div class="aviso tip" style="margin-top:14px;"><span class="aviso-icon">✨</span><span>Solo necesitas configurarlo una vez. Puedes modificarlo en cualquier momento volviendo a pulsar "Perfil".</span></div>
+  </div>
+
+  <!-- 3 -->
+  <div class="seccion" id="s3">
+    <div class="seccion-header"><div class="seccion-num">3</div><h2>Barra de herramientas superior (toolbar)</h2></div>
+    <p style="font-size:13.5px;color:var(--gris);margin-bottom:14px;">La barra azul en la parte superior da acceso rápido a las funciones principales:</p>
+
+    <!-- Toolbar visual con FA -->
+    <div class="toolbar-visual">
+      <div class="tv-item"><i class="fa-solid fa-bars"></i>Menú</div>
+      <div class="tv-sep"></div>
+      <div class="tv-item"><i class="fa-regular fa-user"></i>Perfil</div>
+      <div class="tv-sep"></div>
+      <div class="tv-item"><i class="fa-regular fa-clock"></i>Fichaje</div>
+      <div class="tv-sep"></div>
+      <div class="tv-item"><i class="fa-solid fa-arrow-right-from-bracket"></i>Salir</div>
+    </div>
+
+    <!-- Tabla botones con FA -->
+    <div class="tabla-wrap">
+      <table>
+        <thead><tr><th>Botón</th><th>Función</th></tr></thead>
+        <tbody>
+          <tr><td><span class="fa-td"><i class="fa-solid fa-bars"></i><strong>Menú</strong></span></td><td>Abre el panel lateral deslizante con opciones de exportar, informes, copias de seguridad e instalación.</td></tr>
+          <tr><td><span class="fa-td"><i class="fa-regular fa-user"></i><strong>Perfil</strong></span></td><td>Configura tu nombre, DNI, puesto y lugar de trabajo. Estos datos aparecen en todos los informes.</td></tr>
+          <tr><td><span class="fa-td"><i class="fa-regular fa-clock"></i><strong>Fichaje</strong></span></td><td>Abre el portal WCRONOS en una nueva pestaña para fichar la entrada o salida.</td></tr>
+          <tr><td><span class="fa-td"><i class="fa-solid fa-arrow-right-from-bracket"></i><strong>Salir</strong></span></td><td>Cierra la aplicación de forma segura (pide confirmación).</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size:13.5px;color:var(--gris);margin:16px 0 10px;">El <strong>Menú lateral</strong> contiene:</p>
+    <div class="tabla-wrap">
+      <table>
+        <thead><tr><th>Sección</th><th>Opción</th><th>Descripción</th></tr></thead>
+        <tbody>
+          <tr><td rowspan="4"><strong>Gestión</strong></td><td>Exportar</td><td>Exporta todos los registros en PDF o Excel.</td></tr>
+          <tr><td>Instalar App</td><td>Instala ACTOS en tu dispositivo como aplicación (PWA).</td></tr>
+          <tr><td>Eliminar Registro</td><td>Borra todos los registros guardados (pide confirmación).</td></tr>
+          <tr><td>Copia de Seguridad</td><td>Descarga o restaura todos tus registros en un fichero JSON.</td></tr>
+          <tr><td rowspan="2"><strong>Informes</strong></td><td>Generar Informe</td><td>Genera el documento oficial por factor y semestre.</td></tr>
+          <tr><td>Informe Fotográfico</td><td>Crea un documento con fotos justificativas por factor.</td></tr>
+          <tr><td><strong>Documentación</strong></td><td>Guía de Actuaciones</td><td>Abre el PDF de referencia de actuaciones del centro.</td></tr>
+          <tr><td><strong>Soporte</strong></td><td>Ayuda</td><td>Abre el PDF de ayuda de la aplicación.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 4 — BARRA DE AGILIDAD -->
+  <div class="seccion" id="s4">
+    <div class="seccion-header"><div class="seccion-num">4</div><h2>Barra de agilidad</h2></div>
+    <p style="font-size:13.5px;color:var(--gris);margin-bottom:14px;">Justo encima del formulario hay una barra horizontal con <strong>4 botones</strong> que aceleran el flujo de trabajo:</p>
+
+    <!-- Barra visual con iconos Lucide SVG inline -->
+    <div class="agilidad-bar">
+      <div class="agil-btn agil-azul">
+        <!-- Lucide: refresh-cw -->
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        Reiniciar
+      </div>
+      <div class="agil-btn agil-blanco">
+        <!-- Lucide: copy -->
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Duplicar
+      </div>
+      <div class="agil-btn agil-blanco">
+        <!-- Lucide: lock -->
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Fijar
+      </div>
+      <div class="agil-btn agil-blanco">
+        <!-- Lucide: star -->
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Plantillas
+      </div>
+    </div>
+
+    <!-- Tabla con iconos Lucide inline -->
+    <div class="tabla-wrap">
+      <table>
+        <thead><tr><th style="width:140px;">Botón</th><th style="width:60px;text-align:center;">Icono</th><th>Qué hace exactamente</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Reiniciar</strong></td>
+            <td style="text-align:center;"><span class="lucide-td"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span></td>
+            <td><strong>Recarga completamente la aplicación</strong> (equivale a refrescar la página). Los datos guardados no se pierden.</td>
+          </tr>
+          <tr>
+            <td><strong>Duplicar</strong></td>
+            <td style="text-align:center;"><span class="lucide-td"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span></td>
+            <td>Guarda el registro actual y <strong>mantiene los campos Actuación, Zona, Descripción y Factor</strong>. Solo resetea el contador. Ideal para la misma actuación en varios días.</td>
+          </tr>
+          <tr>
+            <td><strong>Fijar Datos</strong></td>
+            <td style="text-align:center;"><span class="lucide-td"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span></td>
+            <td><strong>Congela los campos Actuación y Zona</strong> para que no se borren al pulsar Añadir. Al activarse aparece un candado rosa en esos campos.</td>
+          </tr>
+          <tr>
+            <td><strong>Plantillas</strong></td>
+            <td style="text-align:center;"><span class="lucide-td"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span></td>
+            <td>Abre el gestor de plantillas. Permite <strong>guardar el formulario actual como plantilla</strong> y cargarla al instante. También se pueden eliminar plantillas.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="aviso info"><span class="aviso-icon">ℹ️</span><span>Las plantillas se guardan en el navegador de forma permanente. No se borran al reiniciar ni al hacer copias de seguridad.</span></div>
+  </div>
+
+  <!-- 5 — AÑADIR REGISTRO -->
+  <div class="seccion" id="s5">
+    <div class="seccion-header"><div class="seccion-num">5</div><h2>Cómo añadir un registro</h2></div>
+    <p style="font-size:13.5px;color:var(--gris);margin-bottom:16px;">El formulario está en el panel izquierdo. Rellena los campos y pulsa <span class="btn-sim btn-rosa">＋ Añadir</span>.</p>
+
+    <div class="card">
+      <div class="card-title"><span class="ico" style="background:var(--azul-claro);"><i class="fa-regular fa-calendar-days" style="color:var(--azul);font-size:15px;"></i></span> Fecha / Período</div>
+      <p>Dos modos seleccionables mediante pestañas:</p>
+      <ul style="margin-top:8px;">
+        <li><strong>Día Único:</strong> para una actuación en un solo día concreto.</li>
+        <li><strong>Período:</strong> para actuaciones que abarcan un rango de días (introduce fecha de inicio y fecha de fin).</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico" style="background:var(--azul-claro);"><i class="fa-solid fa-rocket" style="color:var(--azul);font-size:14px;"></i></span> Actuación</div>
+      <p>Tipo de actuación realizada. La app incluye <strong>escritura asistida</strong>: al empezar a escribir aparecen sugerencias predefinidas por factor. Al seleccionar una actuación conocida, el <strong>Factor se rellena automáticamente</strong>.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico" style="background:var(--azul-claro);"><i class="fa-regular fa-pen-to-square" style="color:var(--azul);font-size:14px;"></i></span> Descripción</div>
+      <p>Detalle libre de la actuación. También tiene sugerencias basadas en registros anteriores.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico" style="background:var(--azul-claro);"><i class="fa-solid fa-location-dot" style="color:var(--azul);font-size:15px;"></i></span> Zona</div>
+      <p>Lugar donde se realizó la actuación (ej: Sala de profesores, Pasillo planta baja, Patio exterior). También tiene sugerencias automáticas.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico" style="background:var(--azul-claro);"><i class="fa-solid fa-hashtag" style="color:var(--azul);font-size:14px;"></i></span> Nº de Actuaciones / Tiempo</div>
+      <p>Para los factores <strong>1.1, 1.2 y 1.3</strong>: introduce el número de veces que se realizó la actuación.</p>
+      <p style="margin-top:6px;">Para el factor <strong>1.4 (Especial Atención al Servicio)</strong>: el campo cambia automáticamente a un selector de <strong>horas y minutos (HH:MM)</strong> para el tiempo adicional dedicado.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico" style="background:var(--azul-claro);"><i class="fa-solid fa-list-check" style="color:var(--azul);font-size:13px;"></i></span> Factor</div>
+      <p>Selecciona el factor de productividad. Si usaste la escritura asistida, se rellena solo. Ver sección 6 para la descripción completa de cada factor.</p>
+    </div>
+    <div class="aviso warn"><span class="aviso-icon">⚠️</span><span>Los campos obligatorios son <strong>Fecha</strong> y <strong>Actuación</strong>. Si falta alguno, la app lo avisa al intentar añadir.</span></div>
+  </div>
+
+  <!-- 6 — FACTORES -->
+  <div class="seccion" id="s6">
+    <div class="seccion-header"><div class="seccion-num">6</div><h2>Factores de productividad</h2></div>
+    <p style="font-size:13.5px;color:var(--gris);margin-bottom:16px;">Cada actuación se clasifica en uno de los cuatro factores del Complemento de Productividad:</p>
+    <div class="factor-grid">
+      <div class="factor-item">
+        <span class="factor-pill f11">Factor 1.1</span>
+        <div>
+          <strong style="font-size:13.5px;">Actividad Extraordinaria</strong>
+          <p style="font-size:13px;color:var(--gris);margin-top:3px;">Actuaciones no incluidas en las funciones ordinarias. Ej: gestión sanitaria básica, supervisión del alumnado, comunicación con familias, colocación de vallas, recepción y entrega de materiales, gestión de objetos perdidos.</p>
+        </div>
+      </div>
+      <div class="factor-item">
+        <span class="factor-pill f12">Factor 1.2</span>
+        <div>
+          <strong style="font-size:13.5px;">Funciones Adicionales</strong>
+          <p style="font-size:13px;color:var(--gris);margin-top:3px;">Tareas con mayor complejidad. Ej: organización de eventos, adecuación de aulas, instalación de equipamiento, apoyo administrativo, control de sistemas (riego, iluminación, caldera), primeros auxilios, gestión de residuos, control de suministros.</p>
+        </div>
+      </div>
+      <div class="factor-item">
+        <span class="factor-pill f13">Factor 1.3</span>
+        <div>
+          <strong style="font-size:13.5px;">Especial Iniciativa y Mejora Grupal</strong>
+          <p style="font-size:13px;color:var(--gris);margin-top:3px;">Aportaciones que mejoran el servicio del centro. Ej: participación en reuniones, propuestas de mejora, sistema de registro de incidencias, coordinación con dirección, mejora en gestión de llaves y accesos, desarrollo de esta aplicación.</p>
+        </div>
+      </div>
+      <div class="factor-item">
+        <span class="factor-pill f14">Factor 1.4</span>
+        <div>
+          <strong style="font-size:13.5px;">Especial Atención al Servicio</strong>
+          <p style="font-size:13px;color:var(--gris);margin-top:3px;">Tiempo adicional dedicado más allá del horario establecido. Se registra en <strong>horas y minutos</strong>. El campo de actuaciones cambia automáticamente a selector de tiempo al elegir este factor.</p>
+        </div>
+      </div>
+    </div>
+    <div class="aviso info" style="margin-top:14px;"><span class="aviso-icon">ℹ️</span><span>También existe la opción <strong>"Plan de Actuación Pendiente"</strong> para registrar actuaciones planificadas pero aún no ejecutadas.</span></div>
+  </div>
+
+  <!-- 7 — BOTONES ACCIÓN -->
+  <div class="seccion" id="s7">
+    <div class="seccion-header"><div class="seccion-num">7</div><h2>Botones Añadir / Eliminar / Ordenar / Editar</h2></div>
+    <p style="font-size:13.5px;color:var(--gris);margin-bottom:14px;">En la parte inferior del formulario hay una barra de 4 botones de acción:</p>
+
+    <!-- Barra visual con FA -->
+    <div class="acciones-grid">
+      <div class="accion-item ac-rosa"><i class="fa-solid fa-circle-plus"></i>Añadir</div>
+      <div class="accion-item ac-azul"><i class="fa-regular fa-trash-can"></i>Eliminar</div>
+      <div class="accion-item ac-azul"><i class="fa-solid fa-arrow-down-1-9"></i>Ordenar</div>
+      <div class="accion-item ac-azul"><i class="fa-solid fa-pen-to-square"></i>Editar</div>
+    </div>
+
+    <!-- Tabla con FA -->
+    <div class="tabla-wrap">
+      <table>
+        <thead><tr><th>Botón</th><th>Descripción detallada</th></tr></thead>
+        <tbody>
+          <tr><td><span class="fa-td"><i class="fa-solid fa-circle-plus" style="color:var(--rosa);"></i><strong>Añadir</strong></span></td><td>Guarda el registro con los datos del formulario y lo añade a la tabla. Limpia los campos tras añadir (salvo si "Fijar" está activo).</td></tr>
+          <tr><td><span class="fa-td"><i class="fa-regular fa-trash-can"></i><strong>Eliminar</strong></span></td><td>Elimina la fila actualmente <strong>seleccionada</strong>. Si no hay fila seleccionada, avisa. Para seleccionar una fila, haz clic sobre ella (se resalta en azul claro).</td></tr>
+          <tr><td><span class="fa-td"><i class="fa-solid fa-arrow-down-1-9"></i><strong>Ordenar</strong></span></td><td>Reordena todos los registros cronológicamente por fecha, de más antigua a más reciente.</td></tr>
+          <tr><td><span class="fa-td"><i class="fa-solid fa-pen-to-square"></i><strong>Editar</strong></span></td><td>Abre un modal con el registro seleccionado para modificar cualquier campo: fecha, actuación, descripción, zona, factor y número de actuaciones/tiempo.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="aviso tip"><span class="aviso-icon">✨</span><span>Para <strong>editar o eliminar</strong> primero haz clic en la fila de la tabla que quieras modificar — se resaltará en azul — y después pulsa el botón correspondiente.</span></div>
+  </div>
+
+  <!-- 8 — TABLA -->
+  <div class="seccion" id="s8">
+    <div class="seccion-header"><div class="seccion-num">8</div><h2>Tabla de registros</h2></div>
+    <div class="card">
+      <div class="card-title"><span class="ico" style="background:var(--azul-claro);"><i class="fa-solid fa-table-columns" style="color:var(--azul);font-size:14px;"></i></span> Columnas de la tabla</div>
+      <p>La tabla muestra: <strong>Fecha(s) · Actuación · Factor · Descripción · Zona · Actos/Tiempo</strong>. La columna Actos/Tiempo muestra el número de actuaciones o, para el factor 1.4, el tiempo en formato HH:MM.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico" style="background:var(--azul-claro);"><i class="fa-solid fa-magnifying-glass" style="color:var(--azul);font-size:14px;"></i></span> Buscador</div>
+      <p>La barra de búsqueda encima de la tabla filtra los registros en tiempo real. Puedes buscar por cualquier campo: actuación, descripción, zona, factor o fecha.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico" style="background:var(--azul-claro);"><i class="fa-regular fa-eye" style="color:var(--azul);font-size:14px;"></i></span> Vista al cargar</div>
+      <p>Al abrir la aplicación, la tabla muestra <strong>solo los registros del último día</strong> con entradas. Borra el buscador o escribe en él para ver todos los registros.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico" style="background:var(--azul-claro);"><i class="fa-solid fa-chart-bar" style="color:var(--azul);font-size:14px;"></i></span> Estadísticas</div>
+      <p>Encima del formulario hay dos tarjetas que muestran el <strong>total de actuaciones</strong> (suma de todos los registros) y las actuaciones de <strong>hoy</strong>. Al pie de la tabla aparece también el conteo total de filas.</p>
+    </div>
+  </div>
+
+  <!-- 9 — EXPORTAR -->
+  <div class="seccion" id="s9">
+    <div class="seccion-header"><div class="seccion-num">9</div><h2>Exportar registros e informes oficiales</h2></div>
+    <div class="card">
+      <div class="card-title"><span class="ico" style="background:var(--azul-claro);"><i class="fa-solid fa-file-pdf" style="color:var(--azul);font-size:15px;"></i></span> Exportar en PDF</div>
+      <p>Genera un PDF con todos los registros en tabla, datos del usuario en la cabecera y una segunda página con el resumen agrupado de actuaciones. Accede desde <strong>Menú → Exportar → Exportar en PDF</strong>.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico" style="background:var(--azul-claro);"><i class="fa-solid fa-file-excel" style="color:var(--azul);font-size:15px;"></i></span> Exportar en Excel</div>
+      <p>Genera un fichero <code>.xlsx</code> con dos hojas: <strong>Registros</strong> (detalle completo) y <strong>Resumen</strong> (agrupado por actuación y factor). Compatible con OnlyOffice, LibreOffice y Microsoft Excel. Accede desde <strong>Menú → Exportar → Exportar en Excel</strong>.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico" style="background:var(--azul-claro);"><i class="fa-solid fa-file" style="color:var(--azul);font-size:15px;"></i></span> Generar Informe oficial para OnlyOffice</div>
+      <p>Genera el documento oficial del Complemento de Productividad para el factor y semestre seleccionados, con tablas de actuaciones, fechas, cálculos de días y porcentajes. El documento está <strong>optimizado para OnlyOffice</strong>: al abrirlo, el formato, tablas y estilos se mostrarán correctamente.</p>
+      <p style="margin-top:8px;">Una vez generado, aparece el fichero <code>.doc</code> en la <strong>esquina inferior derecha del navegador</strong> — pulsa en él para abrirlo directamente en OnlyOffice.</p>
+    </div>
+    <div class="pasos" style="margin-top:16px;">
+      <div class="paso"><div class="paso-num">1</div><div class="paso-contenido"><strong>Abre el Menú lateral y pulsa "Generar Informe"</strong><span>En la sección "Informes" del menú lateral.</span></div></div>
+      <div class="paso"><div class="paso-num">2</div><div class="paso-contenido"><strong>Selecciona el factor</strong><span>Factor 1.1, 1.2, 1.3 o 1.4.</span></div></div>
+      <div class="paso"><div class="paso-num">3</div><div class="paso-contenido"><strong>Selecciona el semestre</strong><span>1º semestre (Enero–Junio) o 2º semestre (Julio–Diciembre).</span></div></div>
+      <div class="paso"><div class="paso-num">4</div><div class="paso-contenido"><strong>Pulsa "Generar documento"</strong><span>Se descargará un fichero <code>.doc</code> listo para abrir en OnlyOffice o LibreOffice y firmar.</span></div></div>
+    </div>
+    <div class="aviso tip" style="margin-top:14px;"><span class="aviso-icon">✨</span><span>Los documentos generados están optimizados para <strong>OnlyOffice</strong>. Puedes descargarlo gratis para Android desde la Play Store, o la versión de escritorio desde onlyoffice.com.</span></div>
+  </div>
+
+  <!-- 10 — INFORME FOTOGRÁFICO -->
+  <div class="seccion" id="s10">
+    <div class="seccion-header"><div class="seccion-num">10</div><h2>Informe fotográfico justificativo</h2></div>
+    <p style="font-size:13.5px;color:var(--gris);margin-bottom:16px;">Crea un documento con fotografías organizadas por factor como evidencia visual. Accede desde <strong>Menú → Informe Fotográfico</strong>.</p>
+    <div class="pasos">
+      <div class="paso"><div class="paso-num">1</div><div class="paso-contenido"><strong>Selecciona el factor de la imagen</strong><span>Elige a qué factor (1.1, 1.2, 1.3 o 1.4) corresponde la foto.</span></div></div>
+      <div class="paso"><div class="paso-num">2</div><div class="paso-contenido"><strong>Escribe la descripción</strong><span>Añade qué muestra la foto, fecha, lugar, etc.</span></div></div>
+      <div class="paso"><div class="paso-num">3</div><div class="paso-contenido"><strong>Selecciona la imagen o imágenes</strong><span>Puedes subir varias a la vez; se añadirán todas con la misma descripción y factor.</span></div></div>
+      <div class="paso"><div class="paso-num">4</div><div class="paso-contenido"><strong>Pulsa "Añadir imagen/es"</strong><span>Las fotos se agregan a la lista de borrador visible en el modal.</span></div></div>
+      <div class="paso"><div class="paso-num">5</div><div class="paso-contenido"><strong>Selecciona el semestre y genera el documento</strong><span>Pulsa "Generar documento". Se descarga un documento con las fotos en cuadrículas organizadas por factor.</span></div></div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title"><span class="ico" style="background:var(--azul-claro);"><i class="fa-solid fa-floppy-disk" style="color:var(--azul);font-size:15px;"></i></span> Guardar y cargar borrador</div>
+      <p>Guarda el estado actual del informe fotográfico como <code>.json</code> (<strong>"Guardar borrador"</strong>) para continuar más tarde, y <strong>"Cargar borrador"</strong> para recuperarlo.</p>
+    </div>
+  </div>
+
+  <!-- 11 — FICHAJE -->
+  <div class="seccion" id="s11">
+    <div class="seccion-header"><div class="seccion-num">11</div><h2>Fichaje asistido en WCRONOS</h2></div>
+    <div class="card">
+      <div class="card-title"><span class="ico" style="background:var(--azul-claro);"><i class="fa-regular fa-clock" style="color:var(--azul);font-size:15px;"></i></span>WCRONOS</div>
+      <p style="margin-bottom:8px;"><strong>¿Cómo funciona?</strong></p>
+      <p>El botón <strong>Fichaje</strong> de la barra superior abre el portal de fichaje de Torrevieja (<code>fichaje.torrevieja.es</code>) en una nueva pestaña del navegador.</p>
+      <p style="margin-top:8px;"><strong>La primera vez</strong> tendrás que introducir tu tarjeta y contraseña manualmente — el navegador te ofrecerá guardarlas para las siguientes ocasiones.</p>
+    </div>
+    <div class="aviso warn"><span class="aviso-icon">⚠️</span><span>ACTOS abre el portal pero no almacena ni transmite tus credenciales de fichaje. La seguridad la gestiona directamente el sistema WCRONOS.</span></div>
+  </div>
+
+  <!-- 12 — COPIAS -->
+  <div class="seccion" id="s12">
+    <div class="seccion-header"><div class="seccion-num">12</div><h2>Copias de seguridad</h2></div>
+    <p style="font-size:13.5px;color:var(--gris);margin-bottom:16px;">Los datos se guardan en el navegador. Haz copias periódicas para no perderlos si cambias de dispositivo o limpias el navegador.</p>
+    <div class="card">
+      <div class="card-title"><span class="ico" style="background:var(--azul-claro);"><i class="fa-solid fa-cloud-arrow-down" style="color:var(--azul);font-size:15px;"></i></span> Hacer copia de seguridad</div>
+      <p>Ve a <strong>Menú → Copia de Seguridad → Guardar Datos</strong>. Se descarga un fichero <code>.json</code> con todos tus registros. Guárdalo en una carpeta del trabajo o en la nube.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico" style="background:var(--azul-claro);"><i class="fa-solid fa-cloud-arrow-up" style="color:var(--azul);font-size:15px;"></i></span> Restaurar copia de seguridad</div>
+      <p>Ve a <strong>Menú → Copia de Seguridad → Restaurar Datos</strong>. Selecciona el fichero <code>.json</code> guardado anteriormente. Los registros se restaurarán automáticamente.</p>
+    </div>
+    <div class="aviso tip"><span class="aviso-icon">✨</span><span>Se recomienda hacer una copia de seguridad <strong>al menos una vez por semana</strong> o siempre antes de generar un informe importante.</span></div>
+  </div>
+
+  <!-- 13 — INSTALAR -->
+  <div class="seccion" id="s13">
+    <div class="seccion-header"><div class="seccion-num">13</div><h2>Instalar la aplicación en tu dispositivo</h2></div>
+    <p style="font-size:13.5px;color:var(--gris);margin-bottom:16px;">ACTOS puede instalarse como aplicación sin necesidad de tienda de apps (es una PWA – Progressive Web App).</p>
+    <div class="pasos">
+      <div class="paso"><div class="paso-num">1</div><div class="paso-contenido"><strong>Abre el Menú lateral</strong><span>En la barra superior de la aplicación.</span></div></div>
+      <div class="paso"><div class="paso-num">2</div><div class="paso-contenido"><strong>Pulsa "Instalar App"</strong><span>Si el navegador lo permite, aparece el diálogo de instalación. Acepta para instalar.</span></div></div>
+      <div class="paso"><div class="paso-num">3</div><div class="paso-contenido"><strong>Alternativa manual en Chrome</strong><span>En Android: menú ⋮ → "Añadir a pantalla de inicio". En escritorio: icono de instalación en la barra de direcciones.</span></div></div>
+    </div>
+ <p style="margin-top:11px;">
+    <div class="aviso info">
+<span class="aviso-icon">ℹ️</span><span>La app instalada funciona igual que en el navegador. Los datos son los mismos, ya que ambas versiones usan el mismo almacenamiento local del navegador.</span></div></p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p><strong>ACTOS · Registro de Actuaciones</strong> — Manual de Usuario v1.0</p>
+  <p style="margin-top:4px;">Desarrollado por <strong>Antonio Contreras Manarel</strong></p>
+  <p style="margin-top:4px;"><strong>Ayuntamiento de Torrevieja</strong> · Concejalía de Educación</p>
+
+  <p style="margin-top:4px;">Manual diseñado en colaboración con <strong>Canva</strong></p>
+  <a href="index.html">← Volver a la aplicación</a>
+</div>
+
+</body>
+</html>
